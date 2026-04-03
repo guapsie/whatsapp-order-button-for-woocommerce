@@ -16,7 +16,7 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit; // Security check
+    exit; // Security check.
 }
 
 define( 'WOBFW_VERSION', '1.0.0' );
@@ -38,19 +38,20 @@ class WOBFW_Core {
     }
 
     private function init_hooks() {
-        // Init Admin
+        // Initialise Admin context.
         $admin = new WOBFW_Admin();
         add_action( 'admin_menu', array( $admin, 'add_plugin_admin_menu' ) );
 
-        // Init Frontend
+        // Initialise Frontend context.
         $frontend = new WOBFW_Frontend();
-        // Elegante: Lo metemos DEBAJO del form de añadir al carrito, no al lado estorbando
+        
+        // Elegant layout: Positioned beneath the add to cart form for better visibility.
         add_action( 'woocommerce_after_add_to_cart_form', array( $frontend, 'add_product_button' ) );
         add_action( 'wp_footer', array( $frontend, 'render_floating_button' ) );
     }
 }
 
-// Arrancamos el motor
+// Initialise the plugin.
 function wobfw_run_plugin() {
     new WOBFW_Core();
 }
