@@ -6,11 +6,14 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+    exit; // Security check.
 }
 
 class WOBFW_Admin {
 
+    /**
+     * Registers the plugin settings menu in the WordPress administrative dashboard.
+     */
     public function add_plugin_admin_menu() {
         add_menu_page(
             __( 'WhatsApp Order Settings', 'wobfw' ), 
@@ -23,11 +26,18 @@ class WOBFW_Admin {
         );
     }
 
+    /**
+     * Renders the settings page and handles form submissions.
+     */
     public function display_settings_page() {
+        // Handle form submission.
         if ( isset( $_POST['wobfw_save'] ) && current_user_can( 'manage_options' ) ) {
-            // Check nonce for security (siempre hay que meter un nonce en los formularios admin, pichi)
+            
+            // Verify nonce for security purposes.
             if ( isset( $_POST['wobfw_nonce'] ) && wp_verify_nonce( $_POST['wobfw_nonce'], 'wobfw_save_settings' ) ) {
-                $phone = preg_replace( '/[^0-9]/', '', sanitize_text_field( $_POST['wobfw_phone'] ) );
+                
+                // Sanitize and save data.
+                $phone         = preg_replace( '/[^0-9]/', '', sanitize_text_field( $_POST['wobfw_phone'] ) );
                 $show_floating = isset( $_POST['wobfw_show_floating'] ) ? 'yes' : 'no';
 
                 update_option( 'wobfw_phone', $phone );
@@ -38,6 +48,7 @@ class WOBFW_Admin {
             }
         }
         
+        // Retrieve current options.
         $phone         = get_option( 'wobfw_phone', '' );
         $msg           = get_option( 'wobfw_msg', "Hello,\nI require assistance with my purchase." );
         $show_floating = get_option( 'wobfw_show_floating', 'yes' );
@@ -86,7 +97,7 @@ class WOBFW_Admin {
                     <li><strong>Smart QR Codes:</strong> Desktop users see a beautiful QR code to scan with their phones.</li>
                 </ul>
                 <p style="margin-top: 20px;">
-                    <a href="https://guapsie.dev/whatcart-pro" target="_blank" class="button button-primary" style="background: #25D366; border-color: #1DA851; text-shadow: none;">Get WhatCart PRO Now</a>
+                    <a href="https://guapsie.dev/whatsapp-order-button-for-woocommerce" target="_blank" class="button button-primary" style="background: #25D366; border-color: #1DA851; text-shadow: none;">Get WhatCart PRO Now</a>
                 </p>
             </div>
         </div>
